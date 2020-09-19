@@ -1,5 +1,5 @@
 import React from 'react';
-import {DroppableDiv, DroppableText} from './styles';
+import {DroppableDiv, DroppableText, FlagImage} from './styles';
 import {DropTarget} from 'react-dnd';
 
 const BG = {
@@ -8,7 +8,7 @@ const BG = {
     canDrop: '#d2d2d2'
 }
 
-const Dustbin = ({ canDrop, isOver, connectDropTarget, background,text}) => {
+const Dustbin = ({ canDrop, isOver, connectDropTarget, background,text, svg}) => {
 
     const isActive = canDrop && isOver
     let backgroundColor = background
@@ -19,6 +19,7 @@ const Dustbin = ({ canDrop, isOver, connectDropTarget, background,text}) => {
     }
     return (
         <DroppableDiv ref={connectDropTarget} backgroundColor={backgroundColor}>
+            {svg && <FlagImage src={svg}/>}
             <DroppableText>
                 {isActive ? 'RELEASE TO PUT' : text}
             </DroppableText>

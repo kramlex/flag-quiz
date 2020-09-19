@@ -37,9 +37,10 @@ const FlagQuiz = (props) => {
     const [counter, setCounter] = useState(0)
 
     //timeout setting
-    const [doneSleepMode, setSleepMode] = useState(false)
+    const [wait, setWait] = useState(false)
     const [dropZoneBG, setBG] = useState(bgDefault)
     const [dropZoneText, setText] = useState(textDefault)
+    const [dropZoneSVG, setSVG] = useState(null)
 
     const updateFlags = () => {
         const gameStage = generateStage()
@@ -52,17 +53,17 @@ const FlagQuiz = (props) => {
         updateFlags()
     },[])
 
-    useEffect(() => {
-
-    },[dropZoneBG])
+    // useEffect(() => {},[dropZoneBG,dropZoneText])
 
 
-    const doneFlag = () => {
+    const doneFlag = (svg) => {
         setBG('#30dc70')
-        setText('CORRECT')
+        setText('')
+        setSVG(svg)
         setTimeout( () => {
             setBG(bgDefault)
             setText(textDefault)
+            setSVG(null)
             updateFlags()
         },1500)
     }
@@ -102,11 +103,11 @@ const FlagQuiz = (props) => {
                 background={dropZoneBG}
                 text={dropZoneText}
                 base={base[1]}
+                svg={dropZoneSVG}
             />
 
             {renderFlagZone()}
-                {/*{renderFlags}*/}
-            <button onClick={updateFlags}>KEK</button>
+            {/*<button onClick={updateFlags}>KEK</button>*/}
             {/*<StartButton>Start</StartButton>*/}
         </QuizWrapper>
     )

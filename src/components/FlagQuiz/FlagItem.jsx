@@ -17,14 +17,14 @@ export default DragSource(
     'box',
     {
         beginDrag: (props) => {
-            return { name: props.name , shortName: props.shortName}
+            return { name: props.name , shortName: props.shortName, svg: props.svg}
         },
         endDrag(props, monitor) {
             const item = monitor.getItem()
             const dropResult = monitor.getDropResult()
             if (dropResult) {
                 if(item.shortName === dropResult.base) {
-                    props.doneFlag()
+                    props.doneFlag(props.svg)
                 }
                 else {
                     props.wrongFlag()
