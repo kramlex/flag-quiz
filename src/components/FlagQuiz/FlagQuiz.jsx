@@ -1,17 +1,15 @@
 import React, {useEffect, useState} from "react";
-import {BaseCountry, CounterText, FlagCell, FlagsZone, HeaderText, QuizWrapper, StartButton} from "./styles"
+import {BaseCountry, CounterText, FlagCell, FlagsZone, HeaderText, QuizWrapper} from "./styles"
 import FlagItem from "./FlagItem";
 import DroppableZone from './DroppableZone';
-import {getSvg, randomElements, randomNumbers, randomShuffle} from '../../utils/utils';
+import {getSvg, randomElements, randomNumbers} from '../../utils/utils';
 import countries from 'svg-country-flags/countries.json'
-
-const shortNames = Object.entries(countries).map(([key,]) => {
-    return key
-})
-const bgDefault = '#f6f6f6'
-const textDefault = `PUT THE FLAG HERE`
+import {constants} from './constants';
 
 const generateStage = () => {
+    const shortNames = Object.entries(countries).map(([key,]) => {
+        return key
+    })
     const fl = randomElements(shortNames,3)
     const baseIndex = randomNumbers({n:3,count:1})
     return  {
@@ -28,19 +26,25 @@ const generateStage = () => {
 }
 
 
-const FlagQuiz = (props) => {
+const FlagQuiz = () => {
     // setting
     // stateQuiz
-    const [gameStarted, setGameStarted] = useState(false)
     const [flags, setFlags] = useState([])
     const [base, setBase] = useState([])
     const [counter, setCounter] = useState(0)
 
     //timeout setting
-    const [dropZoneBG, setBG] = useState(bgDefault)
-    const [dropZoneText, setText] = useState(textDefault)
+    const [dropZoneBG, setBG] = useState(constants.dropZone.color.default)
+    const [dropZoneText, setText] = useState(constants.dropZone.text.default)
     const [dropZoneSVG, setSVG] = useState(null)
 
+
+    // set state func
+    const setDropZoneData = (background, text, svg) => {
+        setBG(background)
+        setText(text)
+        setSVG(svg)
+    }
     const updateFlags = () => {
         const gameStage = generateStage()
         setFlags(gameStage.flags)
@@ -52,49 +56,40 @@ const FlagQuiz = (props) => {
         updateFlags()
     },[])
 
-    // useEffect(() => {},[dropZoneBG,dropZoneText])
-
-
     const doneFlag = (svg) => {
-        setBG('#30dc70')
-        setText('')
-        setSVG(svg)
+        setDropZoneData(constants.dropZone.color.correct, constants.dropZone.text.correct, svg)
         setTimeout( () => {
-            setBG(bgDefault)
-            setText(textDefault)
-            setSVG(null)
+            setDropZoneData(constants.dropZone.color.default, constants.dropZone.text.default , null)
             setCounter(value=>value+1)
             updateFlags()
-        },1500)
-    }
-    const wrongFlag = () => {
-        setBG('#d53636')
-        setText('WRONG')
-        setTimeout(()=> {
-            setBG(bgDefault)
-            setText(textDefault)
-        }, 1500 )
+        },constants.quiz.sleep)
     }
 
+    const wrongFlag = () => {
+        setDropZoneData(constants.dropZone.color.wrong, constants.dropZone.text.wrong, null)
+        setTimeout(()=> {
+            setDropZoneData(constants.dropZone.color.default, constants.dropZone.text.default, null)
+        }, constants.quiz.sleep)
+    }
+
+    // RENDER METHODS
     const renderFlagZone = () => {
         return (
             <FlagsZone>
-                {flags.map((flag, index) => {
-                    console.log(flag.shortName)
-                    return(
-                        <FlagCell key={index}>
-                            <FlagItem name={flag.name}
-                                      shortName={flag.shortName}
-                                      svg={flag.svg}
-                                      doneFlag={doneFlag}
-                                      wrongFlag={wrongFlag}
-                            />
-                        </FlagCell>
-                    )
-                })}
+                {flags.map((flag, index) => (
+                    <FlagCell key={index}>
+                        <FlagItem name={flag.name}
+                                  shortName={flag.shortName}
+                                  svg={flag.svg}
+                                  doneFlag={doneFlag}
+                                  wrongFlag={wrongFlag}
+                        />
+                    </FlagCell>
+                ))}
             </FlagsZone>
         )
     }
+
     return (
         <QuizWrapper>
             <HeaderText>Welcome to Flag Quiz</HeaderText>
@@ -108,8 +103,6 @@ const FlagQuiz = (props) => {
             />
 
             {renderFlagZone()}
-            {/*<button onClick={updateFlags}>KEK</button>*/}
-            {/*<StartButton>Start</StartButton>*/}
         </QuizWrapper>
     )
 

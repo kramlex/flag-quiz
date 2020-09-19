@@ -1,9 +1,10 @@
 import React from 'react';
 import {FlagDiv, FlagImage} from './styles';
 import {DragSource} from 'react-dnd';
+import {constants} from './constants';
 
 
-const FlagItem = ({ name, svg, isDragging, connectDragSource }) => {
+const FlagItem = ({svg, isDragging, connectDragSource }) => {
     const opacity = isDragging ? 1 : 1
     const visibility = isDragging ? 'hidden' :'visible'
     return (
@@ -14,7 +15,7 @@ const FlagItem = ({ name, svg, isDragging, connectDragSource }) => {
 }
 
 export default DragSource(
-    'box',
+    constants.targetType.BOX,
     {
         beginDrag: (props) => {
             return { name: props.name , shortName: props.shortName, svg: props.svg}
@@ -23,13 +24,8 @@ export default DragSource(
             const item = monitor.getItem()
             const dropResult = monitor.getDropResult()
             if (dropResult) {
-                if(item.shortName === dropResult.base) {
-                    props.doneFlag(props.svg)
-                }
-                else {
-                    props.wrongFlag()
-                }
-                // alert(`You dropped ${item.shortName} into ${dropResult.base}!`)
+                if(item.shortName === dropResult.base) props.doneFlag(props.svg)
+                else props.wrongFlag()
             }
         },
     },

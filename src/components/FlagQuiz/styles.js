@@ -1,11 +1,5 @@
 import styled from 'styled-components'
 
-export const constants = {
-    background: {
-
-    }
-}
-
 export const QuizWrapper = styled.div`
   width: 800px;
   //height: 600px;
