@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {BaseCountry, FlagCell, FlagsZone, HeaderText, QuizWrapper, StartButton} from "./styles"
+import {BaseCountry, CounterText, FlagCell, FlagsZone, HeaderText, QuizWrapper, StartButton} from "./styles"
 import FlagItem from "./FlagItem";
 import DroppableZone from './DroppableZone';
 import {getSvg, randomElements, randomNumbers, randomShuffle} from '../../utils/utils';
@@ -37,7 +37,6 @@ const FlagQuiz = (props) => {
     const [counter, setCounter] = useState(0)
 
     //timeout setting
-    const [wait, setWait] = useState(false)
     const [dropZoneBG, setBG] = useState(bgDefault)
     const [dropZoneText, setText] = useState(textDefault)
     const [dropZoneSVG, setSVG] = useState(null)
@@ -64,6 +63,7 @@ const FlagQuiz = (props) => {
             setBG(bgDefault)
             setText(textDefault)
             setSVG(null)
+            setCounter(value=>value+1)
             updateFlags()
         },1500)
     }
@@ -98,6 +98,7 @@ const FlagQuiz = (props) => {
     return (
         <QuizWrapper>
             <HeaderText>Welcome to Flag Quiz</HeaderText>
+            <CounterText>{counter}</CounterText>
             <BaseCountry>{base[0]}</BaseCountry>
             <DroppableZone
                 background={dropZoneBG}

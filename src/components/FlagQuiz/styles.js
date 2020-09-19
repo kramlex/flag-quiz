@@ -130,5 +130,10 @@ export const DroppableText = styled.span`
   max-width: 100px;
   font-family: "Courier New",sans-serif;
   color: rgba(5,1,1,0.55);
-  
+ 
+`
+
+export const CounterText = styled.h2`
+  font-family: "Courier New",sans-serif;
+  text-align: center;
 `
